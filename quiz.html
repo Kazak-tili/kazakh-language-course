@@ -125,6 +125,8 @@
             let message = `📊 ЖАҢА НӘТИЖЕ!%0A%0A👤 Аты: ${user.fullname || 'Құрметті оқушы'}%0A📧 Email: ${user.email || 'белгісіз'}%0A📚 Сабақ: ${lessonId}%0A⭐ Ұпай: ${Math.round(percent)}%`;
             
             fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${message}`)
+                .then(response => response.json())
+                .then(data => console.log("Telegram жауабы:", data))
                 .catch(e => console.log("Қате:", e));
         } catch(e) { console.log("Қате:", e); }
         // =====================================================
