@@ -116,23 +116,18 @@
         document.getElementById('submitBtn').disabled = true;
         if(passed) localStorage.setItem('lesson'+lessonId+'_test_passed','true');
 
-        // ============ GOOGLE SHEETS-КЕ НӘТИЖЕ ЖІБЕРУ ============
+        // ============ TELEGRAM БОТҚА НӘТИЖЕ ЖІБЕРУ ============
         try {
             let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
-            let webhookUrl = "https://script.google.com/macros/s/AKfycby1HTTA0N48gCqJnGugBnR9a43hjGlPiUbvN29Fg3dpNKW1TtScXEChEF67RtUhGtGc/exec";
+            let token = "8684860980:AAG9LhxwsE5-ZDEbeeZu1MyPasDyOLQ3Gs0";
+            let chatId = "976812448";
             
-            fetch(webhookUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    fullname: user.fullname || "Құрметті оқушы",
-                    email: user.email || "белгісіз",
-                    lessonId: lessonId,
-                    score: Math.round(percent)
-                })
-            }).catch(e => console.log("Жіберу қатесі:", e));
+            let message = `📊 ЖАҢА НӘТИЖЕ!%0A%0A👤 Аты: ${user.fullname || 'Құрметті оқушы'}%0A📧 Email: ${user.email || 'белгісіз'}%0A📚 Сабақ: ${lessonId}%0A⭐ Ұпай: ${Math.round(percent)}%`;
+            
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${message}`)
+                .catch(e => console.log("Қате:", e));
         } catch(e) { console.log("Қате:", e); }
-        // =========================================================
+        // =====================================================
     }
 
     function nextLesson() { window.location.href = 'dashboard.html'; }
