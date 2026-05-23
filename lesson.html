@@ -6,36 +6,11 @@
     <title>Видео сабақ - Қазақ тілі</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #f5ede0;
-            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 245, 0.95);
-            border-radius: 50px;
-            padding: 30px;
-            border: 1px solid #E6D3B3;
-        }
+        body { background: #f5ede0; font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255, 255, 245, 0.95); border-radius: 50px; padding: 30px; border: 1px solid #E6D3B3; }
         h1 { color: #5A3A1A; text-align: center; margin-bottom: 20px; }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .task-box { background: #FFFCF8; padding: 20px; border-radius: 30px; margin-top: 20px; border: 1px solid #DDBF8C; }
         .task-img { max-width: 100%; border-radius: 20px; margin: 15px 0; border: 1px solid #DDBF8C; }
         textarea { width: 100%; padding: 12px; border-radius: 20px; border: 1px solid #DDBF8C; font-size: 16px; background: white; }
@@ -60,31 +35,13 @@
 </div>
 <script>
     const lessonsData = {
-    1: {
-        videoUrl: "https://www.youtube.com/embed/u-f1asK70C8",
-        taskImage: "task_images/sabaq1_task.png"
-    },
-    2: {
-        videoUrl: "https://www.youtube.com/embed/hnx0GCBaytQ",
-        taskImage: "task_images/sabaq2_task.png"
-    },
-    3: {
-        videoUrl: "https://www.youtube.com/embed/e2uvlcO1I-0",
-        taskImage: "task_images/sabaq3_task.png"
-    },
-    4: {
-        videoUrl: "https://www.youtube.com/embed/DbPYhxIVREE",
-        taskImage: "task_images/sabaq4_task.png"
-    },
-    5: {
-        videoUrl: "https://www.youtube.com/embed/ecOsz5A1vXQ",
-        taskImage: "task_images/sabaq5_task.png"
-    },
-    6: {
-        videoUrl: "https://www.youtube.com/embed/6LZCg86MS3Q",
-        taskImage: "task_images/sabaq6_task.png"
-    }
-};
+        1: { videoUrl: "https://www.youtube.com/embed/u-f1asK70C8", taskImage: "task_images/sabaq1_task.png" },
+        2: { videoUrl: "https://www.youtube.com/embed/hnx0GCBaytQ", taskImage: "task_images/sabaq2_task.png" },
+        3: { videoUrl: "https://www.youtube.com/embed/e2uvlcO1I-0", taskImage: "task_images/sabaq3_task.png" },
+        4: { videoUrl: "https://www.youtube.com/embed/ecOsz5A1vXQ", taskImage: "task_images/sabaq4_task.png" },
+        5: { videoUrl: "", taskImage: "task_images/sabaq5_task.png" },
+        6: { videoUrl: "", taskImage: "task_images/sabaq6_task.png" }
+    };
 
     let lessonId = parseInt(localStorage.getItem('currentLesson'));
     let taskDone = localStorage.getItem('lesson'+lessonId+'_task_done') === 'true';
@@ -93,14 +50,13 @@
         document.getElementById('lessonTitle').innerHTML = lessonId + " - Сабақ";
         let data = lessonsData[lessonId];
         document.getElementById('taskImage').src = data.taskImage;
-
-        if(data.videoUrl && data.videoUrl !== "") {
-            let videoHtml = `<iframe src="${data.videoUrl}" frameborder="0" allowfullscreen></iframe>`;
-            document.getElementById('videoPlayer').innerHTML = videoHtml;
+        
+        if(data.videoUrl) {
+            document.getElementById('videoPlayer').innerHTML = `<iframe src="${data.videoUrl}" frameborder="0" allowfullscreen></iframe>`;
         } else {
-            document.getElementById('videoPlayer').innerHTML = '<p style="color:orange; text-align:center;">⚠️ Видео әлі қосылмаған. Кейінірек қосылады.</p>';
+            document.getElementById('videoPlayer').innerHTML = '<p style="color:orange; text-align:center;">⚠️ Видео әлі қосылмаған</p>';
         }
-
+        
         let savedAnswer = localStorage.getItem('lesson'+lessonId+'_answer');
         if(savedAnswer) document.getElementById('answer').value = savedAnswer;
         if(taskDone) document.getElementById('nextBtn').style.display = 'inline-block';
@@ -109,8 +65,25 @@
     function submitTask() {
         let answer = document.getElementById('answer').value;
         if(answer.length < 3) { alert('Жауабыңызды жазыңыз!'); return; }
+        
+        // Жауапты LocalStorage-ке сақтау
         localStorage.setItem('lesson'+lessonId+'_answer', answer);
         localStorage.setItem('lesson'+lessonId+'_task_done', 'true');
+        
+        // ============ TELEGRAM БОТҚА ЖАУАП ЖІБЕРУ ============
+        try {
+            let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            let token = "8684860980:AAG9LhxwsE5-ZDEbeeZu1MyPasDyOLQ3Gs0";
+            let chatId = "976812448";
+            
+            let message = `📝 ТАПСЫРМА ЖАУАБЫ%0A%0A👤 Оқушы: ${user.fullname || 'Құрметті оқушы'}%0A📧 Email: ${user.email || 'белгісіз'}%0A📚 Сабақ: ${lessonId}%0A✍️ Жауап: ${answer}`;
+            
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${message}`)
+                .then(() => console.log("Жауап Telegram-ға жіберілді"))
+                .catch(e => console.log("Қате:", e));
+        } catch(e) { console.log("Қате:", e); }
+        // =====================================================
+        
         alert('Тапсырма қабылданды!');
         document.getElementById('nextBtn').style.display = 'inline-block';
     }
