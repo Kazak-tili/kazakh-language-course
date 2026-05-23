@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Курс беті - Қазақ тілі</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5ede0; font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: rgba(255, 255, 245, 0.95); border-radius: 50px; padding: 30px; border: 1px solid #E6D3B3; }
+        .lesson-card { border: 1px solid #DDBF8C; border-radius: 20px; padding: 15px; margin: 12px 0; background: #FFFCF8; transition: 0.3s; }
+        .lesson-card.available { cursor: pointer; border-left: 5px solid #4CAF50; }
+        .lesson-card.locked { opacity: 0.6; background: #f5f5f5; }
+        .badge { background: #4CAF50; color: white; padding: 3px 10px; border-radius: 20px; font-size: 12px; display: inline-block; margin-top: 8px; }
+        .progress-bar { width: 100%; background: #e0e0e0; border-radius: 10px; height: 10px; margin-top: 10px; }
+        .progress-fill { background: #4CAF50; height: 10px; border-radius: 10px; width: 0%; }
+        h1 { color: #5A3A1A; text-align: center; margin-bottom: 25px; }
+        .red-btn { background: #f44336; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; font-size: 16px; display: block; margin: 20px auto 0; width: 200px; }
+        .gold-btn { background: gold; color: black; font-weight: bold; padding: 12px 25px; border: none; border-radius: 40px; cursor: pointer; margin-top: 20px; width: 100%; }
+        .bonus-box { margin: 30px 0; background: #FFFCF8; border-radius: 50px; padding: 25px; border: 1px solid #DDBF8C; text-align: center; }
+        .bonus-title { color: #5A3A1A; margin-bottom: 15px; }
+        .shorts-container { display: flex; justify-content: center; margin: 20px 0; }
+        .shorts-iframe { width: 100%; max-width: 400px; height: 700px; border-radius: 20px; border: none; }
+        @media (max-width: 500px) { .shorts-iframe { max-width: 300px; height: 530px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 Қазақ тілі курсы</h1>
+    <div id="lessonsList"></div>
+    <div style="margin-top: 30px;">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <p id="progressText" style="text-align: center; margin-top: 10px; color: #4F2F10;"></p>
+    </div>
+    
+    <!-- SHORTS МУЛЬТФИЛЬМ (6-сабақ пен сертификаттың АРАСЫНДА) -->
+    <div id="bonusContainer"></div>
+    
+    <div id="certificateContainer"></div>
+    
+    <button class="red-btn" onclick="logout()">Шығу</button>
+</div>
+
+<script>
+    const lessons = [
+        { id: 1, title: "1-сабақ", duration: "15 минут" },
+        { id: 2, title: "2-сабақ", duration: "15 минут" },
+        { id: 3, title: "3-сабақ", duration: "15 минут" },
+        { id: 4, title: "4-сабақ", duration: "15 минут" },
+        { id: 5, title: "5-сабақ", duration: "15 минут" },
+        { id: 6, title: "6-сабақ", duration: "15 минут" }
+    ];
+    function getUnlockedLessons() {
+        let unlocked = [1];
+        for(let i=2; i<=6; i++) if(localStorage.getItem('lesson'+(i-1)+'_test_passed') === 'true') unlocked.push(i);
+        return unlocked;
+    }
+    function loadDashboard() {
+        let unlocked = getUnlockedLessons();
+        let completed = [];
+        for(let i=1; i<=6; i++) if(localStorage.getItem('lesson'+i+'_test_passed') === 'true') completed.push(i);
+        let html = '';
+        lessons.forEach(lesson => {
+            let isUnlocked = unlocked.includes(lesson.id);
+            let isCompleted = completed.includes(lesson.id);
+            html += `<div class="lesson-card ${isUnlocked ? 'available' : 'locked'}" onclick="${isUnlocked ? `openLesson(${lesson.id})` : ''}">
+                <div style="display: flex; justify-content: space-between;"><div><h3>📖 ${lesson.title}</h3><p>⏱️ ${lesson.duration}</p>${isCompleted ? '<span class="badge">✅ Өтілген</span>' : ''}</div><div>${!isUnlocked ? '🔒' : ''}</div></div>
+                ${isCompleted ? '<div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>' : ''}
+            </div>`;
+        });
+        document.getElementById('lessonsList').innerHTML = html;
+        let percent = (completed.length/6)*100;
+        document.getElementById('progressFill').style.width = percent+'%';
+        document.getElementById('progressText').innerHTML = `✅ ${completed.length}/6 сабақ өтілді (${Math.round(percent)}%)`;
+        
+        // МУЛЬТФИЛЬМ (ТЕК 6 САБАҚ ӨТІЛГЕНДЕН КЕЙІН КӨРСЕТУ)
+        const bonusDiv = document.getElementById('bonusContainer');
+        const certDiv = document.getElementById('certificateContainer');
+        
+        if(completed.length === 6) {
+            // YouTube Shorts мультфильм
+            bonusDiv.innerHTML = `
+                <div class="bonus-box">
+                    <h2 class="bonus-title">🎬 Сатылай кешенді талдау</h2>
+                    <div class="shorts-container">
+                        <iframe class="shorts-iframe" src="https://www.youtube.com/embed/m7IcKk_V6sg" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <p style="color: #6B4226; font-size: 14px;">📖 «Сатылай кешенді талдау» әдістемесі түсіндірілген мультфильм</p>
+                </div>
+            `;
+            // Сертификат батырмасы
+            certDiv.innerHTML = '<div style="margin-top: 20px;"><button class="gold-btn" onclick="window.location.href=\'certificate.html\'">🎓 СЕРТИФИКАТ АЛУ 🎓</button></div>';
+        } else {
+            bonusDiv.innerHTML = '';
+            certDiv.innerHTML = '';
+        }
+    }
+    function openLesson(id) { localStorage.setItem('currentLesson', id); window.location.href = 'lesson.html'; }
+    function logout() { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('currentUser'); alert("Шықтыңыз!"); window.location.href = 'index.html'; }
+    if(localStorage.getItem('isLoggedIn') !== 'true') window.location.href = 'index.html';
+    loadDashboard();
+</script>
+</body>
+</html>
