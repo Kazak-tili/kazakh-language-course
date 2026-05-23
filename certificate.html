@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Сертификат - Қазақ тілі курсы</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -13,10 +13,6 @@
             font-family: 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
             min-height: 100vh;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
         }
         .certificate-container {
             position: relative;
@@ -24,7 +20,13 @@
             width: 100%;
             margin: 0 auto;
         }
-        .certificate-img { width: 100%; height: auto; display: block; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .certificate-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
         .recipient-name {
             position: absolute; top: 31%; left: 50%; transform: translate(-50%, -50%);
             font-size: 22px; font-weight: bold; color: #1a1a2e; font-family: 'Times New Roman', serif;
@@ -72,8 +74,20 @@
 </div>
 <div class="books-section">
     <h2>📚 ТЕОРИЯЛЫҚ БАЗА</h2>
-    <div><div class="book-card"><div style="font-size:40px;">📖</div><h3>Туынды сөздер</h3><a href="Туынды_сөздер.pdf" download class="download-btn">📥 PDF жүктеу</a></div>
-    <div class="book-card"><div style="font-size:40px;">📘</div><h3>Сатылай кешенді талдау</h3><a href="Сатылай_кешенді_талдау.pdf" download class="download-btn">📥 PDF жүктеу</a></div></div>
+    <div>
+        <div class="book-card">
+            <div class="book-icon">📖</div>
+            <h3>Туынды сөздер</h3>
+            <p>5-сынып, қазақ тілі</p>
+            <a href="Туынды_сөздер.pdf" download class="download-btn">📥 PDF жүктеу</a>
+        </div>
+        <div class="book-card">
+            <div class="book-icon">📘</div>
+            <h3>Сатылай кешенді талдау</h3>
+            <p>5-сынып, қазақ тілі</p>
+            <a href="Сатылай_кешенді_талдау.pdf" download class="download-btn">📥 PDF жүктеу</a>
+        </div>
+    </div>
 </div>
 <script>
     function loadCertificate() {
