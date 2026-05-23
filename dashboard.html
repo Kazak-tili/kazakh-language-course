@@ -19,9 +19,8 @@
         .gold-btn { background: gold; color: black; font-weight: bold; padding: 12px 25px; border: none; border-radius: 40px; cursor: pointer; margin-top: 20px; width: 100%; }
         .bonus-box { margin: 30px 0; background: #FFFCF8; border-radius: 50px; padding: 25px; border: 1px solid #DDBF8C; text-align: center; }
         .bonus-title { color: #5A3A1A; margin-bottom: 15px; }
-        .shorts-container { display: flex; justify-content: center; margin: 20px 0; }
-        .shorts-iframe { width: 100%; max-width: 400px; height: 700px; border-radius: 20px; border: none; }
-        @media (max-width: 500px) { .shorts-iframe { max-width: 300px; height: 530px; } }
+        .youtube-link { display: inline-block; background: #ff0000; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .youtube-link:hover { background: #cc0000; transform: scale(1.02); }
     </style>
 </head>
 <body>
@@ -33,7 +32,7 @@
         <p id="progressText" style="text-align: center; margin-top: 10px; color: #4F2F10;"></p>
     </div>
     
-    <!-- SHORTS МУЛЬТФИЛЬМ (6-сабақ пен сертификаттың АРАСЫНДА) -->
+    <!-- МУЛЬТФИЛЬМ (6-сабақ пен сертификаттың АРАСЫНДА) -->
     <div id="bonusContainer"></div>
     
     <div id="certificateContainer"></div>
@@ -73,22 +72,18 @@
         document.getElementById('progressFill').style.width = percent+'%';
         document.getElementById('progressText').innerHTML = `✅ ${completed.length}/6 сабақ өтілді (${Math.round(percent)}%)`;
         
-        // МУЛЬТФИЛЬМ (ТЕК 6 САБАҚ ӨТІЛГЕНДЕН КЕЙІН КӨРСЕТУ)
+        // МУЛЬТФИЛЬМ
         const bonusDiv = document.getElementById('bonusContainer');
         const certDiv = document.getElementById('certificateContainer');
         
         if(completed.length === 6) {
-            // YouTube Shorts мультфильм
             bonusDiv.innerHTML = `
                 <div class="bonus-box">
                     <h2 class="bonus-title">🎬 Сатылай кешенді талдау</h2>
-                    <div class="shorts-container">
-                        <iframe class="shorts-iframe" src="https://www.youtube.com/embed/m7IcKk_V6sg" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <p style="color: #6B4226; font-size: 14px;">📖 «Сатылай кешенді талдау» әдістемесі түсіндірілген мультфильм</p>
+                    <a href="https://youtube.com/shorts/m7IcKk_V6sg" target="_blank" class="youtube-link">🎥 Мультфильмді YouTube-та көру</a>
+                    <p style="color: #6B4226; font-size: 14px; margin-top: 15px;">📖 «Сатылай кешенді талдау» әдістемесі түсіндірілген мультфильм</p>
                 </div>
             `;
-            // Сертификат батырмасы
             certDiv.innerHTML = '<div style="margin-top: 20px;"><button class="gold-btn" onclick="window.location.href=\'certificate.html\'">🎓 СЕРТИФИКАТ АЛУ 🎓</button></div>';
         } else {
             bonusDiv.innerHTML = '';
