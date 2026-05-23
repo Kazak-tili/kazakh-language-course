@@ -34,14 +34,16 @@
     <button id="nextBtn" class="blue" onclick="goToQuiz()" style="display:none;">📋 Тестке өту →</button>
 </div>
 <script>
+    // =============== БАРЛЫҚ 6 ВИДЕО СІЛТЕМЕЛЕРІ ===============
     const lessonsData = {
         1: { videoUrl: "https://www.youtube.com/embed/u-f1asK70C8", taskImage: "task_images/sabaq1_task.png" },
         2: { videoUrl: "https://www.youtube.com/embed/hnx0GCBaytQ", taskImage: "task_images/sabaq2_task.png" },
         3: { videoUrl: "https://www.youtube.com/embed/e2uvlcO1I-0", taskImage: "task_images/sabaq3_task.png" },
-        4: { videoUrl: "https://www.youtube.com/embed/ecOsz5A1vXQ", taskImage: "task_images/sabaq4_task.png" },
-        5: { videoUrl: "", taskImage: "task_images/sabaq5_task.png" },
-        6: { videoUrl: "", taskImage: "task_images/sabaq6_task.png" }
+        4: { videoUrl: "https://www.youtube.com/embed/DbPYhxIVREE", taskImage: "task_images/sabaq4_task.png" },
+        5: { videoUrl: "https://www.youtube.com/embed/ecOsz5A1vXQ", taskImage: "task_images/sabaq5_task.png" },
+        6: { videoUrl: "https://www.youtube.com/embed/6LZCg86MS3Q", taskImage: "task_images/sabaq6_task.png" }
     };
+    // ========================================================
 
     let lessonId = parseInt(localStorage.getItem('currentLesson'));
     let taskDone = localStorage.getItem('lesson'+lessonId+'_task_done') === 'true';
@@ -66,23 +68,17 @@
         let answer = document.getElementById('answer').value;
         if(answer.length < 3) { alert('Жауабыңызды жазыңыз!'); return; }
         
-        // Жауапты LocalStorage-ке сақтау
         localStorage.setItem('lesson'+lessonId+'_answer', answer);
         localStorage.setItem('lesson'+lessonId+'_task_done', 'true');
         
-        // ============ TELEGRAM БОТҚА ЖАУАП ЖІБЕРУ ============
+        // Telegram ботқа жауап жіберу
         try {
             let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
             let token = "8684860980:AAG9LhxwsE5-ZDEbeeZu1MyPasDyOLQ3Gs0";
             let chatId = "976812448";
-            
             let message = `📝 ТАПСЫРМА ЖАУАБЫ%0A%0A👤 Оқушы: ${user.fullname || 'Құрметті оқушы'}%0A📧 Email: ${user.email || 'белгісіз'}%0A📚 Сабақ: ${lessonId}%0A✍️ Жауап: ${answer}`;
-            
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${message}`)
-                .then(() => console.log("Жауап Telegram-ға жіберілді"))
-                .catch(e => console.log("Қате:", e));
-        } catch(e) { console.log("Қате:", e); }
-        // =====================================================
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${message}`).catch(e => console.log(e));
+        } catch(e) { console.log(e); }
         
         alert('Тапсырма қабылданды!');
         document.getElementById('nextBtn').style.display = 'inline-block';
