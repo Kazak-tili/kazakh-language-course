@@ -19,8 +19,8 @@
         .gold-btn { background: gold; color: black; font-weight: bold; padding: 12px 25px; border: none; border-radius: 40px; cursor: pointer; margin-top: 20px; width: 100%; }
         .bonus-box { margin: 30px 0; background: #FFFCF8; border-radius: 50px; padding: 25px; border: 1px solid #DDBF8C; text-align: center; }
         .bonus-title { color: #5A3A1A; margin-bottom: 15px; }
-        .youtube-link { display: inline-block; background: #ff0000; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; font-size: 16px; font-weight: bold; transition: 0.3s; }
-        .youtube-link:hover { background: #cc0000; transform: scale(1.02); }
+        video { width: 100%; border-radius: 20px; margin-bottom: 15px; outline: none; }
+        .shorts-container { display: flex; justify-content: center; margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -72,18 +72,23 @@
         document.getElementById('progressFill').style.width = percent+'%';
         document.getElementById('progressText').innerHTML = `✅ ${completed.length}/6 сабақ өтілді (${Math.round(percent)}%)`;
         
-        // МУЛЬТФИЛЬМ
+        // МУЛЬТФИЛЬМ (ТЕК 6 САБАҚ ӨТІЛГЕНДЕН КЕЙІН КӨРСЕТУ)
         const bonusDiv = document.getElementById('bonusContainer');
         const certDiv = document.getElementById('certificateContainer');
         
         if(completed.length === 6) {
+            // KeepHere мультфильм
             bonusDiv.innerHTML = `
                 <div class="bonus-box">
                     <h2 class="bonus-title">🎬 Сатылай кешенді талдау</h2>
-                    <a href="https://youtube.com/shorts/m7IcKk_V6sg" target="_blank" class="youtube-link">🎥 Мультфильмді YouTube-та көру</a>
-                    <p style="color: #6B4226; font-size: 14px; margin-top: 15px;">📖 «Сатылай кешенді талдау» әдістемесі түсіндірілген мультфильм</p>
+                    <video controls>
+                        <source src="https://keephere.ru/get/HETNQkIdRqfFGFEF/f/telegram-cloud-document-2-5231323531496692009.mp4" type="video/mp4">
+                        Сіздің браузеріңіз видео қолдамайды.
+                    </video>
+                    <p style="color: #6B4226; font-size: 14px;">📖 «Сатылай кешенді талдау» әдістемесі түсіндірілген мультфильм</p>
                 </div>
             `;
+            // Сертификат батырмасы
             certDiv.innerHTML = '<div style="margin-top: 20px;"><button class="gold-btn" onclick="window.location.href=\'certificate.html\'">🎓 СЕРТИФИКАТ АЛУ 🎓</button></div>';
         } else {
             bonusDiv.innerHTML = '';
